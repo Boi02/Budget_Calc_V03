@@ -1,0 +1,2354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>My Money</title>
+
+  <!-- JPEG Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+
+    /* =========================
+       GLOBAL
+    ========================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --text: #1d1d1f;
+      --secondary: rgba(29, 29, 31, 0.55);
+
+      --blue: #007aff;
+      --green: #34c759;
+      --red: #ff453a;
+
+      --glass: rgba(255, 255, 255, 0.42);
+      --glass-light: rgba(255, 255, 255, 0.60);
+
+      --border: rgba(255, 255, 255, 0.65);
+    }
+
+
+    /* =========================
+       BODY
+    ========================= */
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 40px 20px;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      color: var(--text);
+
+      background:
+
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(0, 122, 255, 0.20),
+          transparent 30%
+        ),
+
+        radial-gradient(
+          circle at 90% 15%,
+          rgba(175, 82, 222, 0.18),
+          transparent 30%
+        ),
+
+        radial-gradient(
+          circle at 50% 90%,
+          rgba(52, 199, 89, 0.15),
+          transparent 35%
+        ),
+
+        linear-gradient(
+          135deg,
+          #eef2f7,
+          #e3e9f2
+        );
+
+      background-attachment: fixed;
+    }
+
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+      max-width: 1050px;
+      margin: auto;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 46px;
+      margin: 0 0 10px;
+      letter-spacing: -2px;
+      font-weight: 750;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1d1d1f,
+          #62626a
+        );
+
+      background-clip: text;
+      -webkit-background-clip: text;
+
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 17px;
+    }
+
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 20px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+
+    /* =========================
+       LIQUID GLASS CARD
+    ========================= */
+
+    .card {
+
+      position: relative;
+
+      padding: 28px;
+
+      border-radius: 26px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.62),
+          rgba(255,255,255,0.25)
+        );
+
+      backdrop-filter:
+        blur(25px)
+        saturate(180%);
+
+      -webkit-backdrop-filter:
+        blur(25px)
+        saturate(180%);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.65);
+
+      box-shadow:
+
+        0 10px 30px
+        rgba(31,38,50,0.08),
+
+        0 25px 60px
+        rgba(31,38,50,0.06);
+
+      overflow: hidden;
+    }
+
+
+    .card::before {
+
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 45%;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.28),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+
+    /* =========================
+       HEADINGS
+    ========================= */
+
+    h2 {
+
+      margin: 0 0 8px;
+
+      font-size: 24px;
+
+      letter-spacing: -0.6px;
+
+      font-weight: 650;
+    }
+
+    .description {
+
+      color: var(--secondary);
+
+      font-size: 14px;
+
+      margin-bottom: 24px;
+    }
+
+
+    /* =========================
+       INPUT
+    ========================= */
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+
+      display: block;
+
+      font-size: 14px;
+
+      font-weight: 550;
+
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .currency {
+
+      position: absolute;
+
+      left: 16px;
+
+      top: 50%;
+
+      transform:
+        translateY(-50%);
+
+      color: var(--secondary);
+
+      font-size: 15px;
+
+      z-index: 2;
+    }
+
+
+    input {
+
+      width: 100%;
+
+      padding:
+        15px
+        16px
+        15px
+        43px;
+
+      border-radius: 14px;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.65);
+
+      background:
+        rgba(255,255,255,0.38);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+
+      font-family: inherit;
+
+      font-size: 16px;
+
+      color: var(--text);
+
+      outline: none;
+
+      box-shadow:
+        inset 0 1px 1px
+        rgba(255,255,255,0.45);
+
+      transition:
+        0.25s ease;
+    }
+
+    input:hover {
+
+      background:
+        rgba(255,255,255,0.55);
+    }
+
+    input:focus {
+
+      border-color:
+        rgba(0,122,255,0.55);
+
+      background:
+        rgba(255,255,255,0.65);
+
+      box-shadow:
+
+        0 0 0 4px
+        rgba(0,122,255,0.12),
+
+        inset 0 1px 1px
+        rgba(255,255,255,0.6);
+    }
+
+    /* Text input (no currency prefix) used for entry names */
+    input.text-input {
+      padding: 15px 16px;
+    }
+
+
+    /* =========================
+       FOOD DAILY
+    ========================= */
+
+    .food-remark {
+
+      margin-top: 10px;
+
+      padding: 13px 15px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      border-radius: 14px;
+
+      background:
+        rgba(255,255,255,0.32);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.55);
+
+      color: var(--secondary);
+
+      font-size: 13px;
+    }
+
+    .food-remark strong {
+
+      color: var(--text);
+
+      font-size: 14px;
+
+      font-weight: 650;
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    .summary-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 14px;
+    }
+
+    .summary-box {
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,0.38);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.65);
+
+      box-shadow:
+        0 8px 20px
+        rgba(0,0,0,0.04);
+    }
+
+    .summary-label {
+
+      color: var(--secondary);
+
+      font-size: 13px;
+
+      margin-bottom: 10px;
+    }
+
+    .summary-value {
+
+      font-size: 24px;
+
+      font-weight: 700;
+
+      letter-spacing: -0.8px;
+    }
+
+    .income-value {
+      color: var(--blue);
+    }
+
+    .commitment-value {
+      color: var(--red);
+    }
+
+    .remaining-value {
+      color: var(--green);
+    }
+
+
+    /* =========================
+       ALLOCATION
+    ========================= */
+
+    .allocation-summary {
+
+      margin-top: 20px;
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,0.30);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.60);
+    }
+
+    .allocation-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding: 13px 0;
+
+      border-bottom:
+        1px solid
+        rgba(0,0,0,0.06);
+    }
+
+    .allocation-row:last-child {
+      border-bottom: none;
+    }
+
+    .allocation-total {
+
+      margin-top: 14px;
+
+      padding-top: 16px;
+
+      border-top:
+        1.5px solid
+        rgba(29,29,31,0.25);
+
+      display: flex;
+
+      justify-content: space-between;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================
+       ADDITIONAL COMMITMENTS
+    ========================= */
+
+    .additional-list {
+      margin-bottom: 8px;
+    }
+
+    .additional-entry {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr auto;
+
+      gap: 10px;
+
+      align-items: center;
+
+      margin-bottom: 14px;
+
+    }
+
+    .additional-entry .input-wrapper {
+      margin: 0;
+    }
+
+    .remove-entry {
+
+      border: 1px solid rgba(255,69,58,0.35);
+
+      background: rgba(255,69,58,0.10);
+
+      color: var(--red);
+
+      width: 48px;
+      height: 48px;
+
+      border-radius: 12px;
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: 0.2s ease;
+
+      flex-shrink: 0;
+    }
+
+    .remove-entry:hover {
+      background: rgba(255,69,58,0.18);
+    }
+
+    .add-entry-button {
+
+      width: 100%;
+
+      border: 1.5px dashed rgba(0,122,255,0.45);
+
+      background: rgba(0,122,255,0.06);
+
+      color: var(--blue);
+
+      padding: 14px;
+
+      border-radius: 14px;
+
+      font-family: inherit;
+
+      font-size: 15px;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition: 0.2s ease;
+
+      margin-top: 4px;
+    }
+
+    .add-entry-button:hover {
+      background: rgba(0,122,255,0.12);
+    }
+
+    @media (max-width: 600px) {
+
+      .additional-entry {
+        grid-template-columns: 1fr;
+      }
+
+      .remove-entry {
+        width: 100%;
+      }
+
+    }
+
+
+    /* =========================
+       FINAL MONEY
+    ========================= */
+
+    .final-money {
+
+      position: relative;
+
+      margin-top: 20px;
+
+      padding: 25px;
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(28,28,30,0.94),
+          rgba(55,55,60,0.84)
+        );
+
+      backdrop-filter:
+        blur(25px);
+
+      -webkit-backdrop-filter:
+        blur(25px);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+      color: white;
+
+      box-shadow:
+        0 18px 35px
+        rgba(0,0,0,0.16);
+    }
+
+
+    .final-money::before {
+
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      top: -180px;
+      right: -70px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,0.18),
+          transparent 70%
+        );
+
+      pointer-events: none;
+    }
+
+
+    .final-money > * {
+      position: relative;
+
+      z-index: 1;
+    }
+
+    .final-money .summary-label {
+
+      color:
+        rgba(255,255,255,0.58);
+    }
+
+    .final-money .amount {
+
+      font-size: 32px;
+
+      font-weight: 700;
+
+      letter-spacing: -1.2px;
+
+      margin-top: 6px;
+    }
+
+
+    /* =========================
+       NEGATIVE
+    ========================= */
+
+    .negative {
+      color: var(--red) !important;
+    }
+
+
+    /* =========================
+       SAVE BUTTON
+    ========================= */
+
+    .save-section {
+
+      text-align: center;
+
+      margin-top: 38px;
+
+      padding-bottom: 20px;
+    }
+
+
+    .save-button {
+
+      margin: 0 6px 12px;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.65);
+
+      background:
+        rgba(255,255,255,0.42);
+
+      backdrop-filter:
+        blur(18px)
+        saturate(180%);
+
+      -webkit-backdrop-filter:
+        blur(18px)
+        saturate(180%);
+
+      color: var(--text);
+
+      padding:
+        15px
+        28px;
+
+      border-radius: 16px;
+
+      font-family: inherit;
+
+      font-size: 16px;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 10px 25px
+        rgba(0,0,0,0.08);
+
+      transition:
+        all 0.25s ease;
+    }
+
+
+    .save-button:hover {
+
+      background:
+        rgba(255,255,255,0.72);
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 15px 30px
+        rgba(0,0,0,0.12);
+    }
+
+
+    .save-button:active {
+
+      transform:
+        scale(0.97);
+    }
+
+
+    .footer-note {
+
+      text-align: center;
+
+      color: var(--secondary);
+
+      font-size: 13px;
+
+      margin-top: 15px;
+    }
+
+
+    /* =========================
+       SCREENSHOT
+    ========================= */
+
+    .capture-hide {
+      display: none !important;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 750px) {
+
+      body {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 22px;
+        border-radius: 22px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+  <div
+    class="container"
+    id="moneyCalculator"
+  >
+
+    <!-- HEADER -->
+
+    <header>
+
+      <h1>My Money</h1>
+
+      <p>
+        A simple way to keep track of your monthly finances.
+      </p>
+
+    </header>
+
+
+    <div class="grid">
+
+
+      <!-- INCOME -->
+
+      <section class="card full-width">
+
+        <h2>Income</h2>
+
+        <p class="description">
+          Add one or more sources of monthly income.
+        </p>
+
+        <div class="input-group">
+
+          <label>
+            Income Sources
+          </label>
+
+          <div
+            class="additional-list"
+            id="incomeList"
+          >
+            <!-- Dynamic income entries get added here -->
+          </div>
+
+          <button
+            type="button"
+            class="add-entry-button"
+            onclick="addIncomeEntry()"
+          >
+            + Add Income
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- COMMITMENTS -->
+
+      <section class="card">
+
+        <h2>Commitments</h2>
+
+        <p class="description">
+          Your essential monthly expenses.
+        </p>
+
+
+        <div class="input-group">
+
+          <label>Rent</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="rent"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Petrol</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="petrol"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Groceries</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="groceries"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Food</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="food"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+          <div class="food-remark">
+
+            <span>
+              Based on a 30-day month
+            </span>
+
+            <strong id="foodDailyDisplay">
+              RM 0.00/day
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Telco</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="telco"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>SPayLater</label>
+
+          <div class="input-wrapper">
+
+            <span class="currency">RM</span>
+
+            <input
+              type="text"
+              inputmode="decimal"
+              id="spaylater"
+              placeholder="0.00"
+              oninput="calculate()"
+              onblur="normalizeInput(this)"
+            >
+
+          </div>
+
+        </div>
+
+
+        <!-- ADDITIONAL COMMITMENTS -->
+
+        <div class="input-group">
+
+          <label>
+            Additional Commitments
+          </label>
+
+          <div
+            class="additional-list"
+            id="additionalList"
+          >
+            <!-- Dynamic entries get added here -->
+          </div>
+
+          <button
+            type="button"
+            class="add-entry-button"
+            onclick="addEntry()"
+          >
+            + Add Entry
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <section class="card">
+
+        <h2>Financial Summary</h2>
+
+        <p class="description">
+          Your money after monthly commitments.
+        </p>
+
+
+        <div class="summary-grid">
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Income
+            </div>
+
+            <div
+              class="summary-value income-value"
+              id="incomeDisplay"
+            >
+              RM 0.00
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Total Commitment
+            </div>
+
+            <div
+              class="summary-value commitment-value"
+              id="commitmentDisplay"
+            >
+              RM 0.00
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Remaining Money
+            </div>
+
+            <div
+              class="summary-value remaining-value"
+              id="remainingDisplay"
+            >
+              RM 0.00
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="final-money">
+
+          <div class="summary-label">
+            Available After Commitments
+          </div>
+
+          <div
+            class="amount"
+            id="availableDisplay"
+          >
+            RM 0.00
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ALLOCATION -->
+
+      <section class="card full-width">
+
+        <h2>
+          Money Allocation
+        </h2>
+
+        <p class="description">
+          Plan how you want to use your remaining money.
+        </p>
+
+
+        <div class="grid">
+
+
+          <div class="input-group">
+
+            <label>
+              Emergency Fund
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="currency">
+                RM
+              </span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                id="emergency"
+                placeholder="0.00"
+                oninput="calculate()"
+                onblur="normalizeInput(this)"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="input-group">
+
+            <label>
+              Saving Fund
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="currency">
+                RM
+              </span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                id="saving"
+                placeholder="0.00"
+                oninput="calculate()"
+                onblur="normalizeInput(this)"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="input-group">
+
+            <label>
+              Shopping
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="currency">
+                RM
+              </span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                id="shopping"
+                placeholder="0.00"
+                oninput="calculate()"
+                onblur="normalizeInput(this)"
+              >
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="allocation-summary">
+
+
+          <div class="allocation-row">
+
+            <span>
+              Emergency Fund
+            </span>
+
+            <strong id="emergencyDisplay">
+              RM 0.00
+            </strong>
+
+          </div>
+
+
+          <div class="allocation-row">
+
+            <span>
+              Saving Fund
+            </span>
+
+            <strong id="savingDisplay">
+              RM 0.00
+            </strong>
+
+          </div>
+
+
+          <div class="allocation-row">
+
+            <span>
+              Shopping
+            </span>
+
+            <strong id="shoppingDisplay">
+              RM 0.00
+            </strong>
+
+          </div>
+
+
+          <div class="allocation-total">
+
+            <span>
+              Total Allocation
+            </span>
+
+            <span id="allocationDisplay">
+              RM 0.00
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="final-money">
+
+          <div class="summary-label">
+            Final Remaining Money
+          </div>
+
+          <div
+            class="amount"
+            id="finalRemainingDisplay"
+          >
+            RM 0.00
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- SAVE -->
+
+    <div
+      class="save-section"
+      id="saveSection"
+    >
+
+      <button
+        class="save-button"
+        onclick="saveAsJPEG()"
+      >
+        Save as JPEG
+      </button>
+
+      <button
+        class="save-button"
+        onclick="saveAsPDF()"
+      >
+        Save as PDF
+      </button>
+
+      <p class="footer-note">
+        Your calculations update automatically as you type.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    /* =========================
+       SAFE MATH EXPRESSION PARSER
+       Lets users type things like
+       "200+50" or "1200-350*2"
+       into any amount field.
+    ========================= */
+
+    function evaluateExpression(raw) {
+
+      if (
+        raw === null ||
+        raw === undefined
+      ) {
+        return 0;
+      }
+
+      const str = String(raw).trim();
+
+      if (str === "") {
+        return 0;
+      }
+
+      /* Only allow digits, spaces, ., and + - * / ( ) */
+
+      const isSafe =
+        /^[0-9+\-*/().\s]+$/.test(str);
+
+      if (!isSafe) {
+
+        /* Fall back to plain number parsing */
+
+        const plain = parseFloat(str);
+
+        return isNaN(plain) ? 0 : plain;
+
+      }
+
+      try {
+
+        /* eslint-disable no-new-func */
+
+        const result =
+          Function(
+            '"use strict"; return (' +
+            str +
+            ')'
+          )();
+
+        return (
+          typeof result === "number" &&
+          isFinite(result)
+        ) ? result : 0;
+
+      } catch (error) {
+
+        return 0;
+
+      }
+
+    }
+
+
+    function getValue(id) {
+
+      return evaluateExpression(
+        document.getElementById(id).value
+      );
+
+    }
+
+
+    function normalizeInput(el) {
+
+      const raw = el.value.trim();
+
+      if (raw === "") {
+        return;
+      }
+
+      /* Only rewrite the field if it actually
+         contains an expression (has an operator),
+         so plain numbers stay exactly as typed. */
+
+      const hasOperator =
+        /[+\-*/]/.test(
+          raw.replace(/^-/, "")
+        );
+
+      if (!hasOperator) {
+        return;
+      }
+
+      const result =
+        evaluateExpression(raw);
+
+      el.value =
+        Math.round(result * 100) / 100;
+
+      calculate();
+
+    }
+
+
+    function formatMoney(value) {
+
+      return (
+        "RM " +
+        value.toLocaleString(
+          "en-MY",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        )
+      );
+
+    }
+
+
+    /* =========================
+       INCOME ENTRIES
+    ========================= */
+
+    let incomeCounter = 0;
+
+
+    function addIncomeEntry(name, value) {
+
+      incomeCounter++;
+
+      const entryId = "income-entry-" + incomeCounter;
+
+
+      const row = document.createElement("div");
+
+      row.className = "additional-entry";
+
+      row.id = entryId;
+
+      row.innerHTML =
+        '<div class="input-wrapper">' +
+          '<input type="text" class="text-input entry-name" placeholder="Income name (e.g. Salary)" oninput="calculate()" value="' +
+          (name ? name.replace(/"/g, '&quot;') : '') +
+          '">' +
+        '</div>' +
+        '<div class="input-wrapper">' +
+          '<span class="currency">RM</span>' +
+          '<input type="text" inputmode="decimal" class="entry-value" placeholder="0.00" oninput="calculate()" onblur="normalizeInput(this)" value="' +
+          (value ? value : '') +
+          '">' +
+        '</div>' +
+        '<button type="button" class="remove-entry" onclick="removeIncomeEntry(\'' + entryId + '\')">&times;</button>';
+
+
+      document.getElementById(
+        "incomeList"
+      ).appendChild(row);
+
+
+      calculate();
+
+    }
+
+
+    function removeIncomeEntry(entryId) {
+
+      const row =
+        document.getElementById(entryId);
+
+      if (row) {
+
+        row.remove();
+
+        calculate();
+
+      }
+
+    }
+
+
+    function getIncomeTotal() {
+
+      const values =
+        document.querySelectorAll(
+          "#incomeList .entry-value"
+        );
+
+      let total = 0;
+
+      values.forEach(function(input) {
+
+        total +=
+          evaluateExpression(input.value);
+
+      });
+
+      return total;
+
+    }
+
+
+    /* =========================
+       ADDITIONAL COMMITMENT ENTRIES
+    ========================= */
+
+    let entryCounter = 0;
+
+
+    function addEntry(name, value) {
+
+      entryCounter++;
+
+      const entryId = "entry-" + entryCounter;
+
+
+      const row = document.createElement("div");
+
+      row.className = "additional-entry";
+
+      row.id = entryId;
+
+      row.innerHTML =
+        '<div class="input-wrapper">' +
+          '<input type="text" class="text-input entry-name" placeholder="Entry name" oninput="calculate()" value="' +
+          (name ? name.replace(/"/g, '&quot;') : '') +
+          '">' +
+        '</div>' +
+        '<div class="input-wrapper">' +
+          '<span class="currency">RM</span>' +
+          '<input type="text" inputmode="decimal" class="entry-value" placeholder="0.00" oninput="calculate()" onblur="normalizeInput(this)" value="' +
+          (value ? value : '') +
+          '">' +
+        '</div>' +
+        '<button type="button" class="remove-entry" onclick="removeEntry(\'' + entryId + '\')">&times;</button>';
+
+
+      document.getElementById(
+        "additionalList"
+      ).appendChild(row);
+
+
+      calculate();
+
+    }
+
+
+    function removeEntry(entryId) {
+
+      const row =
+        document.getElementById(entryId);
+
+      if (row) {
+
+        row.remove();
+
+        calculate();
+
+      }
+
+    }
+
+
+    function getAdditionalTotal() {
+
+      const values =
+        document.querySelectorAll(
+          "#additionalList .entry-value"
+        );
+
+      let total = 0;
+
+      values.forEach(function(input) {
+
+        total +=
+          evaluateExpression(input.value);
+
+      });
+
+      return total;
+
+    }
+
+
+    function calculate() {
+
+      const income =
+        getIncomeTotal();
+
+
+      /* COMMITMENTS */
+
+      const rent =
+        getValue("rent");
+
+      const petrol =
+        getValue("petrol");
+
+      const groceries =
+        getValue("groceries");
+
+      const food =
+        getValue("food");
+
+      const telco =
+        getValue("telco");
+
+      const spaylater =
+        getValue("spaylater");
+
+      const additionalTotal =
+        getAdditionalTotal();
+
+
+      const totalCommitment =
+        rent +
+        petrol +
+        groceries +
+        food +
+        telco +
+        spaylater +
+        additionalTotal;
+
+
+      const remaining =
+        income -
+        totalCommitment;
+
+
+      /* FOOD / DAY */
+
+      const foodPerDay =
+        food / 30;
+
+
+      document.getElementById(
+        "foodDailyDisplay"
+      ).textContent =
+        formatMoney(foodPerDay) +
+        "/day";
+
+
+      /* ALLOCATION */
+
+      const emergency =
+        getValue("emergency");
+
+      const saving =
+        getValue("saving");
+
+      const shopping =
+        getValue("shopping");
+
+
+      const totalAllocation =
+        emergency +
+        saving +
+        shopping;
+
+
+      const finalRemaining =
+        remaining -
+        totalAllocation;
+
+
+      /* UPDATE */
+
+      document.getElementById(
+        "incomeDisplay"
+      ).textContent =
+        formatMoney(income);
+
+
+      document.getElementById(
+        "commitmentDisplay"
+      ).textContent =
+        formatMoney(totalCommitment);
+
+
+      document.getElementById(
+        "remainingDisplay"
+      ).textContent =
+        formatMoney(remaining);
+
+
+      document.getElementById(
+        "availableDisplay"
+      ).textContent =
+        formatMoney(remaining);
+
+
+      document.getElementById(
+        "emergencyDisplay"
+      ).textContent =
+        formatMoney(emergency);
+
+
+      document.getElementById(
+        "savingDisplay"
+      ).textContent =
+        formatMoney(saving);
+
+
+      document.getElementById(
+        "shoppingDisplay"
+      ).textContent =
+        formatMoney(shopping);
+
+
+      document.getElementById(
+        "allocationDisplay"
+      ).textContent =
+        formatMoney(totalAllocation);
+
+
+      const finalDisplay =
+        document.getElementById(
+          "finalRemainingDisplay"
+        );
+
+
+      finalDisplay.textContent =
+        formatMoney(finalRemaining);
+
+
+      /* NEGATIVE WARNING */
+
+      const remainingDisplay =
+        document.getElementById(
+          "remainingDisplay"
+        );
+
+
+      if (remaining < 0) {
+
+        remainingDisplay.classList.add(
+          "negative"
+        );
+
+      } else {
+
+        remainingDisplay.classList.remove(
+          "negative"
+        );
+
+      }
+
+
+      if (finalRemaining < 0) {
+
+        finalDisplay.classList.add(
+          "negative"
+        );
+
+      } else {
+
+        finalDisplay.classList.remove(
+          "negative"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+    /* =========================
+       SHARED CAPTURE HELPERS
+    ========================= */
+
+    function hideCaptureUI() {
+
+      const saveSection =
+        document.getElementById(
+          "saveSection"
+        );
+
+      saveSection.classList.add(
+        "capture-hide"
+      );
+
+      const removeButtons =
+        document.querySelectorAll(
+          ".remove-entry"
+        );
+
+      removeButtons.forEach(function(btn) {
+        btn.classList.add("capture-hide");
+      });
+
+      const addEntryButtons =
+        document.querySelectorAll(
+          ".add-entry-button"
+        );
+
+      addEntryButtons.forEach(function(btn) {
+        btn.classList.add("capture-hide");
+      });
+
+      return {
+        saveSection: saveSection,
+        removeButtons: removeButtons,
+        addEntryButtons: addEntryButtons
+      };
+
+    }
+
+
+    function showCaptureUI(refs) {
+
+      refs.saveSection.classList.remove(
+        "capture-hide"
+      );
+
+      refs.removeButtons.forEach(function(btn) {
+        btn.classList.remove("capture-hide");
+      });
+
+      refs.addEntryButtons.forEach(function(btn) {
+        btn.classList.remove("capture-hide");
+      });
+
+    }
+
+
+    async function captureCalculatorCanvas() {
+
+      const calculator =
+        document.getElementById(
+          "moneyCalculator"
+        );
+
+      /* Force html2canvas to measure the page
+         using the exact same width/height the
+         browser is actually using right now.
+         Without this it can guess a different
+         width, which squeezes multi-column
+         sections and clips content on the right
+         edge. letterRendering fixes a known
+         html2canvas bug where words run together
+         with system fonts. */
+
+      return await html2canvas(
+        calculator,
+        {
+          scale: 2,
+
+          backgroundColor:
+            "#e8edf5",
+
+          useCORS: true,
+
+          logging: false,
+
+          letterRendering: true,
+
+          windowWidth:
+            document.documentElement.clientWidth,
+
+          windowHeight:
+            document.documentElement.scrollHeight,
+
+          width:
+            calculator.scrollWidth,
+
+          height:
+            calculator.scrollHeight
+        }
+      );
+
+    }
+
+
+    function isIOS() {
+
+      return (
+        /iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        )
+      );
+
+    }
+
+
+    async function shareOrDownloadFile(
+      file,
+      blob,
+      downloadName
+    ) {
+
+      /*
+       * =========================
+       * iPHONE / iPAD
+       * =========================
+       *
+       * Use the native iOS share sheet.
+       */
+
+      if (isIOS()) {
+
+        if (
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({
+            files: [file]
+          })
+        ) {
+
+          await navigator.share({
+
+            files: [file],
+
+            title:
+              "My Money"
+
+          });
+
+          return;
+
+        }
+
+
+        /*
+         * Fallback for older iOS
+         */
+
+        const fallbackURL =
+          URL.createObjectURL(blob);
+
+
+        const newTab =
+          window.open(
+            fallbackURL,
+            "_blank"
+          );
+
+
+        if (!newTab) {
+
+          window.location.href =
+            fallbackURL;
+
+        }
+
+
+        return;
+
+      }
+
+
+      /*
+       * =========================
+       * ANDROID
+       * =========================
+       */
+
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({
+          files: [file]
+        })
+      ) {
+
+        await navigator.share({
+
+          files: [file],
+
+          title:
+            "My Money"
+
+        });
+
+        return;
+
+      }
+
+
+      /*
+       * =========================
+       * DESKTOP
+       * =========================
+       */
+
+      const downloadURL =
+        URL.createObjectURL(blob);
+
+
+      const link =
+        document.createElement("a");
+
+
+      link.href =
+        downloadURL;
+
+
+      link.download =
+        downloadName;
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      document.body.removeChild(
+        link
+      );
+
+
+      setTimeout(
+        function() {
+
+          URL.revokeObjectURL(
+            downloadURL
+          );
+
+        },
+        1000
+      );
+
+    }
+
+
+    /* =========================
+       SAVE AS JPEG
+       iPHONE + DESKTOP SUPPORT
+    ========================= */
+
+    async function saveAsJPEG() {
+
+      const uiRefs = hideCaptureUI();
+
+      try {
+
+        const canvas =
+          await captureCalculatorCanvas();
+
+        showCaptureUI(uiRefs);
+
+        const blob =
+          await new Promise(
+            function(resolve) {
+
+              canvas.toBlob(
+                resolve,
+                "image/jpeg",
+                0.95
+              );
+
+            }
+          );
+
+
+        if (!blob) {
+
+          throw new Error(
+            "Unable to create image."
+          );
+
+        }
+
+
+        const file =
+          new File(
+            [blob],
+            "my-money-calculator.jpeg",
+            {
+              type: "image/jpeg"
+            }
+          );
+
+
+        await shareOrDownloadFile(
+          file,
+          blob,
+          "my-money-calculator.jpeg"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Save error:",
+          error
+        );
+
+
+        /*
+         * If user cancels the iOS
+         * share sheet, don't show
+         * an error message.
+         */
+
+        if (
+          error.name ===
+          "AbortError"
+        ) {
+
+          return;
+
+        }
+
+
+        showCaptureUI(uiRefs);
+
+
+        alert(
+          "Unable to save the image. Please try again."
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       SAVE AS PDF
+       iPHONE + DESKTOP SUPPORT
+    ========================= */
+
+    async function saveAsPDF() {
+
+      const uiRefs = hideCaptureUI();
+
+      try {
+
+        const canvas =
+          await captureCalculatorCanvas();
+
+        showCaptureUI(uiRefs);
+
+        const imgData =
+          canvas.toDataURL(
+            "image/jpeg",
+            0.95
+          );
+
+
+        const jsPDFCtor =
+          window.jspdf &&
+          window.jspdf.jsPDF;
+
+        if (!jsPDFCtor) {
+
+          throw new Error(
+            "PDF library did not load."
+          );
+
+        }
+
+
+        /* Match the PDF page size to
+           the captured image so nothing
+           gets cropped or letterboxed */
+
+        const pdf =
+          new jsPDFCtor({
+
+            orientation:
+              canvas.height >= canvas.width
+                ? "p"
+                : "l",
+
+            unit: "px",
+
+            format: [
+              canvas.width,
+              canvas.height
+            ]
+
+          });
+
+
+        pdf.addImage(
+
+          imgData,
+          "JPEG",
+          0,
+          0,
+          canvas.width,
+          canvas.height
+
+        );
+
+
+        const blob =
+          pdf.output("blob");
+
+
+        const file =
+          new File(
+            [blob],
+            "my-money-calculator.pdf",
+            {
+              type: "application/pdf"
+            }
+          );
+
+
+        await shareOrDownloadFile(
+          file,
+          blob,
+          "my-money-calculator.pdf"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Save error:",
+          error
+        );
+
+
+        if (
+          error.name ===
+          "AbortError"
+        ) {
+
+          return;
+
+        }
+
+
+        showCaptureUI(uiRefs);
+
+
+        alert(
+          "Unable to save the PDF. Please try again."
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       RUN ON PAGE LOAD
+    ========================= */
+
+    addIncomeEntry("Salary", "");
+
+    calculate();
+
+  </script>
+
+</body>
+</html>

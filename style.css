@@ -1,0 +1,725 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #e8edf5;
+
+  --glass: rgba(255, 255, 255, 0.42);
+  --glass-strong: rgba(255, 255, 255, 0.62);
+
+  --text: #1d1d1f;
+  --secondary: rgba(29, 29, 31, 0.58);
+
+  --border: rgba(255, 255, 255, 0.65);
+  --border-dark: rgba(0, 0, 0, 0.06);
+
+  --blue: #007aff;
+  --green: #34c759;
+  --red: #ff453a;
+
+  --shadow:
+    0 10px 30px rgba(31, 38, 50, 0.08),
+    0 25px 60px rgba(31, 38, 50, 0.06);
+}
+
+
+/* =========================
+   BACKGROUND
+========================= */
+
+body {
+  margin: 0;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  color: var(--text);
+
+  padding: 40px 20px;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(0, 122, 255, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(175, 82, 222, 0.14),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(52, 199, 89, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #eef2f7,
+      #e3e9f2
+    );
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  max-width: 1050px;
+  margin: auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 44px;
+  margin: 0 0 10px;
+  letter-spacing: -2px;
+  font-weight: 700;
+
+  background: linear-gradient(
+    135deg,
+    #1d1d1f,
+    #55555c
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+header p {
+  color: var(--secondary);
+  margin: 0;
+  font-size: 17px;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+
+/* =========================
+   LIQUID GLASS CARD
+========================= */
+
+.card {
+  position: relative;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.62),
+      rgba(255, 255, 255, 0.22)
+    );
+
+  backdrop-filter:
+    blur(25px)
+    saturate(180%);
+
+  -webkit-backdrop-filter:
+    blur(25px)
+    saturate(180%);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.65);
+
+  border-radius: 26px;
+
+  padding: 28px;
+
+  box-shadow:
+    var(--shadow);
+
+  overflow: hidden;
+}
+
+
+/* GLASS HIGHLIGHT */
+
+.card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 45%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+
+/* CARD CONTENT ABOVE GLASS */
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================
+   HEADINGS
+========================= */
+
+h2 {
+  margin: 0 0 8px;
+
+  font-size: 24px;
+
+  letter-spacing: -0.6px;
+
+  font-weight: 650;
+}
+
+.description {
+  color: var(--secondary);
+
+  font-size: 14px;
+
+  margin-bottom: 24px;
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+
+  font-size: 14px;
+
+  font-weight: 550;
+
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.currency {
+  position: absolute;
+
+  left: 16px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: var(--secondary);
+
+  font-size: 15px;
+
+  z-index: 2;
+}
+
+
+/* GLASS INPUT */
+
+input {
+  width: 100%;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.65);
+
+  background:
+    rgba(255, 255, 255, 0.38);
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
+  border-radius: 14px;
+
+  padding:
+    15px
+    16px
+    15px
+    43px;
+
+  font-size: 16px;
+
+  color: var(--text);
+
+  outline: none;
+
+  box-shadow:
+    inset 0 1px 1px
+    rgba(255, 255, 255, 0.45);
+
+  transition:
+    0.25s ease;
+}
+
+
+input:hover {
+  background:
+    rgba(255, 255, 255, 0.5);
+}
+
+
+input:focus {
+  border-color:
+    rgba(0, 122, 255, 0.6);
+
+  background:
+    rgba(255, 255, 255, 0.65);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(0, 122, 255, 0.12),
+    inset 0 1px 1px
+    rgba(255, 255, 255, 0.6);
+}
+
+
+/* =========================
+   FOOD DAILY REMARK
+========================= */
+
+.food-remark {
+  margin-top: 10px;
+
+  padding: 13px 15px;
+
+  background:
+    rgba(255, 255, 255, 0.32);
+
+  backdrop-filter:
+    blur(15px);
+
+  -webkit-backdrop-filter:
+    blur(15px);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.55);
+
+  border-radius: 14px;
+
+  font-size: 13px;
+
+  color: var(--secondary);
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.food-remark strong {
+  color: var(--text);
+
+  font-size: 14px;
+
+  font-weight: 650;
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 14px;
+
+  margin-top: 5px;
+}
+
+
+/* MINI GLASS CARDS */
+
+.summary-box {
+  background:
+    rgba(255, 255, 255, 0.38);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.65);
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 8px 20px
+    rgba(0, 0, 0, 0.04);
+}
+
+
+.summary-label {
+  font-size: 13px;
+
+  color: var(--secondary);
+
+  margin-bottom: 10px;
+}
+
+
+.summary-value {
+  font-size: 24px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+}
+
+
+.income-value {
+  color: var(--blue);
+}
+
+.commitment-value {
+  color: var(--red);
+}
+
+.remaining-value {
+  color: var(--green);
+}
+
+
+/* =========================
+   ALLOCATION SUMMARY
+========================= */
+
+.allocation-summary {
+  margin-top: 20px;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(255, 255, 255, 0.3);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.6);
+}
+
+
+.allocation-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 13px 0;
+
+  border-bottom:
+    1px solid
+    rgba(0, 0, 0, 0.06);
+}
+
+
+.allocation-row:last-child {
+  border-bottom: none;
+}
+
+
+.allocation-total {
+  margin-top: 14px;
+
+  padding-top: 16px;
+
+  border-top:
+    1.5px solid
+    rgba(29, 29, 31, 0.25);
+
+  display: flex;
+
+  justify-content: space-between;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   DARK LIQUID GLASS RESULT
+========================= */
+
+.final-money {
+  position: relative;
+
+  margin-top: 20px;
+
+  padding: 25px;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(28, 28, 30, 0.92),
+      rgba(55, 55, 60, 0.82)
+    );
+
+  backdrop-filter:
+    blur(25px);
+
+  -webkit-backdrop-filter:
+    blur(25px);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.15);
+
+  color: white;
+
+  box-shadow:
+    0 18px 35px
+    rgba(0, 0, 0, 0.16);
+}
+
+
+/* LIQUID REFLECTION */
+
+.final-money::before {
+  content: "";
+
+  position: absolute;
+
+  width: 250px;
+  height: 250px;
+
+  top: -160px;
+  right: -60px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.16),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+.final-money > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+.final-money .summary-label {
+  color:
+    rgba(255, 255, 255, 0.58);
+}
+
+
+.final-money .amount {
+  font-size: 32px;
+
+  font-weight: 700;
+
+  letter-spacing: -1.2px;
+
+  margin-top: 6px;
+}
+
+
+/* =========================
+   NEGATIVE
+========================= */
+
+.negative {
+  color: var(--red) !important;
+}
+
+
+/* =========================
+   SAVE SECTION
+========================= */
+
+.save-section {
+  text-align: center;
+
+  margin-top: 38px;
+
+  padding-bottom: 20px;
+}
+
+
+/* LIQUID GLASS BUTTON */
+
+.save-button {
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.65);
+
+  background:
+    rgba(255, 255, 255, 0.42);
+
+  backdrop-filter:
+    blur(18px)
+    saturate(180%);
+
+  -webkit-backdrop-filter:
+    blur(18px)
+    saturate(180%);
+
+  color: var(--text);
+
+  padding:
+    15px
+    28px;
+
+  border-radius: 16px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0, 0, 0, 0.08);
+
+  transition:
+    all 0.25s ease;
+}
+
+
+.save-button:hover {
+  background:
+    rgba(255, 255, 255, 0.7);
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 15px 30px
+    rgba(0, 0, 0, 0.12);
+}
+
+
+.save-button:active {
+  transform:
+    scale(0.97);
+}
+
+
+.footer-note {
+  text-align: center;
+
+  color: var(--secondary);
+
+  font-size: 13px;
+
+  margin-top: 15px;
+}
+
+
+/* =========================
+   SCREENSHOT
+========================= */
+
+.capture-hide {
+  display: none !important;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+  body {
+    padding: 25px 15px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+}
